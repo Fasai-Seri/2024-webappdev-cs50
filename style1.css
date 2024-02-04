@@ -1,0 +1,49 @@
+ body * {
+    display: block;
+    margin: auto;
+    font-family: sans-serif;
+}
+
+img {
+    margin-top: 5%;
+    width: 300px;
+}
+
+[type='text'] {
+    width: 500px;
+    height: 40px;
+    border-radius: 30px;
+    padding-left: 10px;
+    margin-top: 20px;
+    border-width: 1px;
+    border-style: solid;
+}
+
+[type='submit'] {
+    display: inline;
+    height: 30px;
+    border: none;
+    margin: 3px;
+}
+
+.submit {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.link {
+    text-align: right;
+    margin-top: 10px;
+}
+a {
+    display: inline;
+    margin: 10px;
+}
+
+p {
+    position: absolute;
+    top: 175px;
+    left: 725px;
+    color: rgb(36, 120, 244);
+}
+

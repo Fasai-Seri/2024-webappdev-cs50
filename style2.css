@@ -1,0 +1,76 @@
+* {
+    font-family: sans-serif;
+}
+img {
+    height: 25px;
+    margin: 10px;
+}
+
+a {
+    margin: 10px;
+}
+
+.link {
+    position: absolute;
+    right: 10px;
+    top: 15px;
+    
+}
+
+h1 {
+    color: rgb(216, 19, 19);
+    font-weight: 100;
+    font-size: 20px;
+    padding: 25px;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.338);
+}
+
+form {
+    padding-left: 25px;
+    width: 685px;
+    float: left;
+}
+
+label {
+    display: inline-block;
+    width: 170px;
+    font-size: small;
+}
+
+input {
+    display: inline-block;
+    width: 500px;
+    height: 20px;
+    margin-bottom: 10px;
+}
+
+[type='submit'] {
+    background-color: rgb(45, 132, 214);
+    color: white;
+    border: none;
+    width: 130px;
+    height: 30px;
+    font-size: 12px;
+    font-weight: bold;
+    position: relative;
+    margin-left: 550px;
+}
+
+.instruction {
+    width: 400px;
+    float: left;
+    color: gray;
+    font-size: small;
+}
+
+.instruction p:not(.header) {
+    font-size: smaller;
+    padding-left: 10px;
+    height: 20px;
+    margin-bottom: 17px;
+}
+
+.instruction .header {
+    margin: 20px 0px;
+    font-weight: bold;
+}
