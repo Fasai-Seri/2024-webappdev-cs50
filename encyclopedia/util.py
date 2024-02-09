@@ -35,3 +35,4 @@ def get_entry(title):
         return f.read().decode("utf-8")
     except FileNotFoundError:
         return None
+        # return "# Error: The requested page was not found."
