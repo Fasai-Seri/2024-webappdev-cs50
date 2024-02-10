@@ -5,6 +5,10 @@
 {% endblock %}
 
 {% block body %}
+{% if not entry %}
+<h1 style="color:red">Error: The requested page is not found</h1>
+{% else %}
 {{ details|safe }}
 <a href="{% url 'edit' entry=entry %}">Edit</a>
+{% endif %}
 {% endblock %}

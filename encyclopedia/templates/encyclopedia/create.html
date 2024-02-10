@@ -9,6 +9,6 @@ test
 <form action="{% url 'create' %}" id="new_page" method="POST">
     {% csrf_token %}
     {{ page.as_p }}
-    <input type="submit" value="save">{{ error }}
+    <input type="submit" value="save"><p style="color:red">{{ error }}</p>
 </form>
 {% endblock %}

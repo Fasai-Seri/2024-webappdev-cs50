@@ -12,7 +12,7 @@ class NewSearchForm(forms.Form):
 
 class NewPageForm(forms.Form):
     title = forms.CharField(label="Title")
-    details = forms.CharField(widget=forms.Textarea())
+    details = forms.CharField(widget=forms.Textarea(attrs={"style": "height:50%; width:50%"}))
     
 def index(request):
     return render(request, "encyclopedia/index.html", {
@@ -21,6 +21,11 @@ def index(request):
     })
 
 def show(request, entry):
+    if entry.lower() not in [entry.lower() for entry in util.list_entries()]:
+        return render(request, "encyclopedia/show.html", {
+        "entry": False,
+        "form": NewSearchForm(),
+    })
     return render(request, "encyclopedia/show.html", {
         "entry": entry,
         "details": markdown2.markdown(util.get_entry(entry)),
@@ -74,7 +79,7 @@ def edit(request, entry):
     else:
         return render(request, "encyclopedia/edit.html", {
             "entry": entry,
-            "details": markdown2.markdown(util.get_entry(entry))
+            "details": util.get_entry(entry)
         })
         
 def random_page(request):
