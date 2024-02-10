@@ -5,5 +5,10 @@ test
 {% endblock %}
 
 {% block body %}
-<h1>test</h1>
+<h1>Create New Page</h1>
+<form action="{% url 'create' %}" id="new_page" method="POST">
+    {% csrf_token %}
+    {{ page.as_p }}
+    <input type="submit" value="save">{{ error }}
+</form>
 {% endblock %}
