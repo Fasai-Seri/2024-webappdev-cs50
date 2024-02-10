@@ -25,12 +25,12 @@ def show(request, entry):
     })
     
 def search(request):
-    existing = [entry.lower() for entry in util.list_entries()]
-    search = request.GET['search'].lower()
-    if search in existing:
+    existing = util.list_entries()
+    search = request.GET['search']
+    if search.lower() in [entry.lower() for entry in existing]:
         return HttpResponseRedirect(reverse('show', args=[search]))
     else:
-        find = [entry for entry in existing if search in entry]
+        find = [entry for entry in existing if search.lower() in entry.lower()]
         return render(request, 'encyclopedia/search.html', {
             "entries": find,
             "form": NewSearchForm()
