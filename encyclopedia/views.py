@@ -1,12 +1,16 @@
 from django.shortcuts import render
 from django import forms
 from django.http import HttpResponseRedirect
+from django.urls import reverse
 from . import util
 import markdown2
 
 class NewSearchForm(forms.Form):
     search = forms.CharField(label="Search")
 
+# class NewPageForm(forms.Form):
+#     title = forms.CharField(label="Title"),
+#     te
 def index(request):
     return render(request, "encyclopedia/index.html", {
         "entries": util.list_entries(),
@@ -27,6 +31,10 @@ def search(request):
         return render(request, "encyclopedia/search.html", {
             "test": search
         })
+    
+def create(request):
+    return HttpResponseRedirect(reverse('encyclopedia:index'))
+        
 
 
     
