@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from . import util
 import markdown2
+import random
 
 
 class NewSearchForm(forms.Form):
@@ -65,4 +66,18 @@ def create(request, exist=[entry.lower() for entry in util.list_entries()]):
             "page": NewPageForm()
         })
     
-                
+def edit(request, entry):
+    if request.method == "POST":
+        update = request.POST['update']
+        util.save_entry(entry, update)
+        return HttpResponseRedirect(reverse('show', args=[entry]))
+    else:
+        return render(request, "encyclopedia/edit.html", {
+            "entry": entry,
+            "details": markdown2.markdown(util.get_entry(entry))
+        })
+        
+def random_page(request):
+    exist = util.list_entries()
+    result = random.choice(exist)
+    return HttpResponseRedirect(reverse('show', args=[result]))
