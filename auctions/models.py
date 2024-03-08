@@ -19,10 +19,11 @@ class AuctionListing(models.Model):
     starting_bid = models.FloatField(default=0)
     image_url = models.URLField(blank=True)
     category = models.ForeignKey(Category, related_name='listing_by_category', on_delete=models.CASCADE)
-    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='own_auction')
     is_active = models.BooleanField(default=True)
     watchlist = models.ManyToManyField(User, blank=True, related_name='watchlist')
     current_price = models.FloatField(default=0)
+    winner = models.ForeignKey(User, blank=True, on_delete=models.CASCADE, related_name='win_auction', null=True)
     
     def __str__(self):
         return f'{self.title}'
