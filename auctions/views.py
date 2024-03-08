@@ -94,18 +94,19 @@ def create_listing(request):
     })
     
 def listing_page(request, id):
+    selected_listing = AuctionListing.objects.get(id=id)
     if request.method == 'POST':
         add_remove = request.POST.get('add_remove')
         if add_remove == 'add':
-            AuctionListing.objects.get(id=id).watchlist.add(request.user)
+            selected_listing.watchlist.add(request.user)
         else:
-            AuctionListing.objects.get(id=id).watchlist.remove(request.user)
+            selected_listing.watchlist.remove(request.user)
         form = CreateBiddingForm(request.POST)
         if form.is_valid():
             bidding_price = form.cleaned_data['bidding_price']
-            selected_listing = AuctionListing.objects.get(id=id)
             if bidding_price > selected_listing.current_price:
                 selected_listing.current_price = bidding_price
+                selected_listing.winner = request.user
                 selected_listing.save()
                 bidder = request.user
                 new_bidding = Bid(bidder=bidder, auction_listing=selected_listing, bidding_price=bidding_price)
@@ -114,7 +115,9 @@ def listing_page(request, id):
                 return HttpResponse('no')
         close_auction = request.POST.get('close_auction')
         if close_auction == 'close':
-            return HttpResponse('close')
+            selected_listing.is_active = False
+            selected_listing.save()
+            return HttpResponseRedirect(reverse('index'))
             
     return render(request, 'auctions/listing_page.html',{
         'selected_listing': AuctionListing.objects.get(id=id),

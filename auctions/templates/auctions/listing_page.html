@@ -4,6 +4,9 @@
     <h1>Listing Page</h1>
     <h2>{{ selected_listing.title }}</h2>
     {% if user.is_authenticated %}
+        {% if user == selected_listing.winner %}
+        <h1>CONGRATULATIONS</h1>
+        {% endif %}
         {% if user in selected_listing.watchlist.all %}
         <form action='{% url "listing_page" selected_listing.id %}' method='post'>
             {% csrf_token %}
@@ -16,7 +19,12 @@
         </form>
         {% endif %} 
     {% endif %}
-    <img src={{ selected_listing.image_url }} style='height: 300px'>
+
+    {% if selected_listing.image_url %}
+        <img class='card-img-top' src={{ selected_listing.image_url }} style='width: 300px'>
+    {% else %}
+        <img class='card-img-top' src='https://t4.ftcdn.net/jpg/04/70/29/97/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg' style='width: 300px'>
+    {% endif %}
     <p>{{ selected_listing.description }}</p>
     <p>Current Price: {{ selected_listing.current_price }} ฿</p>
     {% if user.is_authenticated %}
