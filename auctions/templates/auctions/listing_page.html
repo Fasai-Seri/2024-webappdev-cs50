@@ -18,6 +18,12 @@
     {% endif %}
     <img src={{ selected_listing.image_url }} style='height: 300px'>
     <p>{{ selected_listing.description }}</p>
-    <p>Current Price: </p>
+    <p>Current Price: {{ selected_listing.current_price }} ฿</p>
+    {% if user.is_authenticated %}
+        <form action='{% url "listing_page" selected_listing.id %}' method='post'>
+            {% csrf_token %}
+            {{ form }}
+        </form>
+    {% endif %}
 
 {% endblock %}

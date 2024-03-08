@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Category, AuctionListing, User
+from .models import Category, AuctionListing, User, Bid
 # Register your models here.
 class AuctionListingAdmin(admin.ModelAdmin):
     filter_horizontal = ('watchlist',)
@@ -8,3 +8,4 @@ class AuctionListingAdmin(admin.ModelAdmin):
 admin.site.register(Category)
 admin.site.register(AuctionListing, AuctionListingAdmin)
 admin.site.register(User)
+admin.site.register(Bid)

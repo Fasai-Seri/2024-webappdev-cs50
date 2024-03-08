@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django import forms
 
-from .models import User, Category, AuctionListing
+from .models import User, Category, AuctionListing, Bid
 
 class CreateLisingForm(forms.Form):
     title = forms.CharField(label='Title:')
@@ -13,7 +13,10 @@ class CreateLisingForm(forms.Form):
     starting_bid = forms.FloatField(label='Starting bid:')
     image_url = forms.URLField(required=False, label='URL for image (optional):')
     category = forms.ChoiceField(widget=forms.Select, choices=[(cat.name, cat.name) for cat in Category.objects.all()], initial=('No category'))
-        
+
+class CreateBiddingForm(forms.Form):
+    bidding_price = forms.FloatField(label='Bidding Price:')
+    
 def index(request):
     return render(request, "auctions/index.html", {
         'active_listing': AuctionListing.objects.filter(is_active=True),
@@ -82,7 +85,7 @@ def create_listing(request):
             category = Category.objects.get(name=form.cleaned_data['category'])
             owner = request.user
             is_active = True
-            new_listing = AuctionListing(title=title, description=description, starting_bid=starting_bid, image_url=image_url, category=category, owner=owner, is_active=is_active)
+            new_listing = AuctionListing(title=title, description=description, starting_bid=starting_bid, image_url=image_url, category=category, owner=owner, is_active=is_active, current_price=starting_bid)
             new_listing.save()
         
            
@@ -97,10 +100,22 @@ def listing_page(request, id):
             AuctionListing.objects.get(id=id).watchlist.add(request.user)
         else:
             AuctionListing.objects.get(id=id).watchlist.remove(request.user)
-                            
+        form = CreateBiddingForm(request.POST)
+        if form.is_valid():
+            bidding_price = form.cleaned_data['bidding_price']
+            selected_listing = AuctionListing.objects.get(id=id)
+            if bidding_price > selected_listing.current_price:
+                selected_listing.current_price = bidding_price
+                selected_listing.save()
+                bidder = request.user
+                new_bidding = Bid(bidder=bidder, auction_listing=selected_listing, bidding_price=bidding_price)
+                new_bidding.save()
+            else:
+                return HttpResponse('no')
     return render(request, 'auctions/listing_page.html',{
         'selected_listing': AuctionListing.objects.get(id=id),
         'user': request.user,
+        'form': CreateBiddingForm()
     })
 
 def watchlist(request):
