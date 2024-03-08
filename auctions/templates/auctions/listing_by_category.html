@@ -1,0 +1,23 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Category: {{ category_name }}</h2>
+    <div class='card-columns' style='display: inline-block; column-break-inside: avoid'>
+        {% for list in all_listing %}
+        <div class='card' style='width: 18rem;'>
+            {% if list.image_url %}
+            <img class='card-img-top' src={{ list.image_url }}>
+            {% else %}
+            <img class='card-img-top' src='https://t4.ftcdn.net/jpg/04/70/29/97/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg'>
+            {% endif %}
+            <div class='card-body'>
+                <h5 class='card-title'><a href="{% url 'listing_page' list.id %}">{{ list.title }}</a></h5>
+                <h6 class='card-title'>Current Price: {{ list.current_price }} ฿</h6>
+                <p class='card-text'>{{ i.description }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+
+{% endblock %}

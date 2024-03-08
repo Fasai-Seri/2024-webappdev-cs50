@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django import forms
 
-from .models import User, Category, AuctionListing, Bid
+from .models import User, Category, AuctionListing, Bid, Comment
 
 class CreateLisingForm(forms.Form):
     title = forms.CharField(label='Title:')
@@ -16,6 +16,9 @@ class CreateLisingForm(forms.Form):
 
 class CreateBiddingForm(forms.Form):
     bidding_price = forms.FloatField(label='Bidding Price:')
+    
+class CreateCommentForm(forms.Form):
+    comment = forms.CharField(widget=forms.Textarea(), label='Comment:')
     
 def index(request):
     return render(request, "auctions/index.html", {
@@ -95,37 +98,60 @@ def create_listing(request):
     
 def listing_page(request, id):
     selected_listing = AuctionListing.objects.get(id=id)
+    user = request.user
     if request.method == 'POST':
         add_remove = request.POST.get('add_remove')
         if add_remove == 'add':
-            selected_listing.watchlist.add(request.user)
+            selected_listing.watchlist.add(user)
         else:
-            selected_listing.watchlist.remove(request.user)
+            selected_listing.watchlist.remove(user)
+            
         form = CreateBiddingForm(request.POST)
         if form.is_valid():
             bidding_price = form.cleaned_data['bidding_price']
             if bidding_price > selected_listing.current_price:
                 selected_listing.current_price = bidding_price
-                selected_listing.winner = request.user
+                selected_listing.winner = user
                 selected_listing.save()
-                bidder = request.user
+                bidder = user
                 new_bidding = Bid(bidder=bidder, auction_listing=selected_listing, bidding_price=bidding_price)
                 new_bidding.save()
             else:
                 return HttpResponse('no')
+            
         close_auction = request.POST.get('close_auction')
         if close_auction == 'close':
             selected_listing.is_active = False
             selected_listing.save()
             return HttpResponseRedirect(reverse('index'))
+        
+        form = CreateCommentForm(request.POST)
+        if form.is_valid():
+            comment = form.cleaned_data['comment']
+            new_comment = Comment(commenter=user, auction_listing=selected_listing, comment=comment)
+            new_comment.save()
+            return HttpResponseRedirect(reverse('listing_page', args=[id]))
             
     return render(request, 'auctions/listing_page.html',{
         'selected_listing': AuctionListing.objects.get(id=id),
         'user': request.user,
-        'form': CreateBiddingForm()
+        'bid_form': CreateBiddingForm(),
+        'comment_form': CreateCommentForm(),
+        'all_comment': AuctionListing.objects.get(id=id).from_listing.all()
     })
 
 def watchlist(request):
     return render(request, 'auctions/watchlist.html', {
         'all_watchlist': request.user.watchlist.all()
+    })
+    
+def all_category(request):
+    return render(request, 'auctions/all_category.html', {
+        'all_category': Category.objects.all()
+    })
+    
+def listing_by_category(request, category_name):
+    return render(request, 'auctions/listing_by_category.html', {
+        'all_listing': Category.objects.get(name=category_name).listing_by_category.all(),
+        'category_name': category_name
     })

@@ -37,4 +37,6 @@ class Bid(models.Model):
 
 class Comment(models.Model):
     id = models.AutoField(primary_key=True)
-    pass
+    commenter = models.ForeignKey(User, on_delete=models.CASCADE, default='')
+    auction_listing = models.ForeignKey(AuctionListing, on_delete=models.CASCADE, default='', related_name='from_listing')
+    comment = models.TextField(default='')

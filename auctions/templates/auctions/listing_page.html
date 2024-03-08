@@ -4,7 +4,7 @@
     <h1>Listing Page</h1>
     <h2>{{ selected_listing.title }}</h2>
     {% if user.is_authenticated %}
-        {% if user == selected_listing.winner %}
+        {% if user == selected_listing.winner and selected_listing.is_active == False %}
         <h1>CONGRATULATIONS</h1>
         {% endif %}
         {% if user in selected_listing.watchlist.all %}
@@ -30,7 +30,8 @@
     {% if user.is_authenticated %}
         <form action='{% url "listing_page" selected_listing.id %}' method='post'>
             {% csrf_token %}
-            {{ form }}
+            {{ bid_form }}
+            <input type='submit'>
         </form>
         {% if user == selected_listing.owner %}
         <form action='{% url "listing_page" selected_listing.id %}' method='post'>
@@ -38,7 +39,14 @@
             <input type='submit', value='close', name='close_auction'>
         </form>
         {% endif %}
+        <form action='{% url "listing_page" selected_listing.id %}' method='post'>
+            {% csrf_token %}
+            {{ comment_form }}
+            <input type='submit'>
+        </form>
     {% endif %}
-
+    {% for comment in all_comment %}
+    <p>{{ comment.comment }}</p>
+    {% endfor %}
 
 {% endblock %}
