@@ -162,3 +162,8 @@ def listing_by_category(request, category_name):
         'all_listing': Category.objects.get(name=category_name).listing_by_category.filter(is_active=True),
         'category_name': category_name
     })
+    
+def closed_listing(request):
+    return render(request, 'auctions/closed_listing.html', {
+        'closed_listing': AuctionListing.objects.filter(is_active=False)
+    })
