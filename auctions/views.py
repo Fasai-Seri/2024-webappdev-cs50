@@ -159,6 +159,6 @@ def all_category(request):
     
 def listing_by_category(request, category_name):
     return render(request, 'auctions/listing_by_category.html', {
-        'all_listing': Category.objects.get(name=category_name).listing_by_category.all(),
+        'all_listing': Category.objects.get(name=category_name).listing_by_category.filter(is_active=True),
         'category_name': category_name
     })

@@ -4,12 +4,17 @@
     <h2>Listing Page</h2>
     <h3 style='color: rgb(58, 106, 203)'>{{ selected_listing.title }}</h3>
     {% if user.is_authenticated %}
-        {% if user == selected_listing.winner and selected_listing.is_active == False %}
-        <div class="alert alert-success" role="alert">
-            Congratulations! You won this auction.
-        </div>
-        {% endif %}
-        {% if selected_listing.is_active %}
+        {% if selected_listing.is_active == False %}
+            {% if user == selected_listing.winner %}
+                <div class="alert alert-success" role="alert">
+                    Congratulations! You won this auction.
+                </div>
+            {% else %}
+                <div class="alert alert-danger" role="alert">
+                    This auction is closed.
+                </div>
+            {% endif %}
+        {% elif selected_listing.is_active %}
             {% if user in selected_listing.watchlist.all %}
             <form action='{% url "listing_page" selected_listing.id %}' method='post'>
                 {% csrf_token %}
