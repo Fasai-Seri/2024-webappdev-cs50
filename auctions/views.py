@@ -103,9 +103,9 @@ def listing_page(request, id):
         add_remove = request.POST.get('add_remove')
         if add_remove == 'add to watchlist':
             selected_listing.watchlist.add(user)
-        else:
+        elif add_remove == 'remove from watchlist':
             selected_listing.watchlist.remove(user)
-            
+         
         form = CreateBiddingForm(request.POST)
         if form.is_valid():
             bidding_price = form.cleaned_data['bidding_price']
