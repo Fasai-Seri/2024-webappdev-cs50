@@ -12,11 +12,11 @@ class CreateLisingForm(forms.Form):
     description = forms.CharField(widget=forms.Textarea(), label='Description:')
     starting_bid = forms.FloatField(label='Starting bid:')
     image_url = forms.URLField(required=False, label='URL for image (optional):')
-    category = forms.ChoiceField(widget=forms.Select, choices=[(cat.name, cat.name) for cat in Category.objects.all()])
-    
+    category = forms.ChoiceField(widget=forms.Select, choices=[(cat.name, cat.name) for cat in Category.objects.all()], initial=('No category'))
+        
 def index(request):
     return render(request, "auctions/index.html", {
-        'active_listing': AuctionListing.objects.filter(is_active=True)
+        'active_listing': AuctionListing.objects.filter(is_active=True),
     })
 
 
@@ -88,4 +88,22 @@ def create_listing(request):
            
     return render(request, 'auctions/create_listing.html', {
         'form': CreateLisingForm(),
+    })
+    
+def listing_page(request, id):
+    if request.method == 'POST':
+        add_remove = request.POST.get('add_remove')
+        if add_remove == 'add':
+            AuctionListing.objects.get(id=id).watchlist.add(request.user)
+        else:
+            AuctionListing.objects.get(id=id).watchlist.remove(request.user)
+                            
+    return render(request, 'auctions/listing_page.html',{
+        'selected_listing': AuctionListing.objects.get(id=id),
+        'user': request.user,
+    })
+
+def watchlist(request):
+    return render(request, 'auctions/watchlist.html', {
+        'all_watchlist': request.user.watchlist.all()
     })

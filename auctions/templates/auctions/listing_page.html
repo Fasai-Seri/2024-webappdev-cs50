@@ -1,0 +1,23 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h1>Listing Page</h1>
+    <h2>{{ selected_listing.title }}</h2>
+    {% if user.is_authenticated %}
+        {% if user in selected_listing.watchlist.all %}
+        <form action='{% url "listing_page" selected_listing.id %}' method='post'>
+            {% csrf_token %}
+            <input type='submit', value='remove', name='add_remove'>
+        </form>
+        {% else %}
+        <form action='{% url "listing_page" selected_listing.id %}' method='post'>
+            {% csrf_token %}
+            <input type='submit', value='add', name='add_remove'>
+        </form>
+        {% endif %} 
+    {% endif %}
+    <img src={{ selected_listing.image_url }} style='height: 300px'>
+    <p>{{ selected_listing.description }}</p>
+    <p>Current Price: </p>
+
+{% endblock %}

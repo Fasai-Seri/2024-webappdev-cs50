@@ -1,9 +1,9 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <h2>Active Listings</h2>
+    <h2>Watchlist</h2>
     <div class='card-columns' style='display: inline-block; column-break-inside: avoid'>
-        {% for list in active_listing %}
+        {% for list in all_watchlist %}
         <div class='card' style='width: 18rem;'>
             {% if list.image_url %}
             <img class='card-img-top' src={{ list.image_url }}>
