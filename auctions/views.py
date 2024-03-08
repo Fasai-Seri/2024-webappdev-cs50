@@ -112,6 +112,10 @@ def listing_page(request, id):
                 new_bidding.save()
             else:
                 return HttpResponse('no')
+        close_auction = request.POST.get('close_auction')
+        if close_auction == 'close':
+            return HttpResponse('close')
+            
     return render(request, 'auctions/listing_page.html',{
         'selected_listing': AuctionListing.objects.get(id=id),
         'user': request.user,

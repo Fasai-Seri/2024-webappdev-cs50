@@ -24,6 +24,13 @@
             {% csrf_token %}
             {{ form }}
         </form>
+        {% if user == selected_listing.owner %}
+        <form action='{% url "listing_page" selected_listing.id %}' method='post'>
+            {% csrf_token %}
+            <input type='submit', value='close', name='close_auction'>
+        </form>
+        {% endif %}
     {% endif %}
+
 
 {% endblock %}
