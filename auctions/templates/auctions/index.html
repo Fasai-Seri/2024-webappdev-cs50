@@ -12,8 +12,12 @@
             {% endif %}
             <div class='card-body'>
                 <h5 class='card-title'><a href="{% url 'listing_page' list.id %}">{{ list.title }}</a></h5>
-                <h6 class='card-title'>Current Price: {{ list.current_price }} ฿</h6>
-                <p class='card-text'>{{ i.description }}</p>
+                {% if list.current_price == 0 %}
+                <h6 class='card-title'>Current Price: ฿ {{ list.starting_bid }} </h6>
+                {% else %}
+                <h6 class='card-title'>Current Price: ฿ {{ list.current_price }} </h6>
+                {% endif %}
+                <p class='card-text'>{{ list.description }}</p>
             </div>
         </div>
         {% endfor %}

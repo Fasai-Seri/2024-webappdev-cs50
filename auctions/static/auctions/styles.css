@@ -2,3 +2,12 @@ body {
     padding: 10px;
 }
 
+h2  {
+    background-color: rgb(58, 106, 203);
+    color: antiquewhite;
+    height: 70px;
+    text-align: center;
+    padding-top: 10px;
+    /* color: rgb(58, 106, 203); */
+}
+

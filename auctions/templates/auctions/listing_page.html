@@ -1,52 +1,90 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-    <h1>Listing Page</h1>
-    <h2>{{ selected_listing.title }}</h2>
+    <h2>Listing Page</h2>
+    <h3 style='color: rgb(58, 106, 203)'>{{ selected_listing.title }}</h3>
     {% if user.is_authenticated %}
         {% if user == selected_listing.winner and selected_listing.is_active == False %}
-        <h1>CONGRATULATIONS</h1>
+        <div class="alert alert-success" role="alert">
+            Congratulations! You won this auction.
+        </div>
         {% endif %}
-        {% if user in selected_listing.watchlist.all %}
-        <form action='{% url "listing_page" selected_listing.id %}' method='post'>
-            {% csrf_token %}
-            <input type='submit', value='remove', name='add_remove'>
-        </form>
-        {% else %}
-        <form action='{% url "listing_page" selected_listing.id %}' method='post'>
-            {% csrf_token %}
-            <input type='submit', value='add', name='add_remove'>
-        </form>
-        {% endif %} 
+        {% if selected_listing.is_active %}
+            {% if user in selected_listing.watchlist.all %}
+            <form action='{% url "listing_page" selected_listing.id %}' method='post'>
+                {% csrf_token %}
+                <input type='submit' value='remove from watchlist' name='add_remove' style='margin: auto'>
+            </form>
+            {% else %}
+            <form action='{% url "listing_page" selected_listing.id %}' method='post'>
+                {% csrf_token %}
+                <input type='submit' value='add to watchlist' name='add_remove' style='margin: auto'>
+            </form>
+            {% endif %} 
+            {% if user == selected_listing.owner %}
+            <form action='{% url "listing_page" selected_listing.id %}' method='post' style='padding-top: 10px'>
+                {% csrf_token %}
+                <input type='submit', value='close this auction', name='close_auction'>
+            </form>
+            {% endif %}
+        {% endif %}
     {% endif %}
 
     {% if selected_listing.image_url %}
-        <img class='card-img-top' src={{ selected_listing.image_url }} style='width: 300px'>
+        <img class='card-img-top' src={{ selected_listing.image_url }} style='width: 300px; padding-top: 10px'>
     {% else %}
-        <img class='card-img-top' src='https://t4.ftcdn.net/jpg/04/70/29/97/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg' style='width: 300px'>
+        <img class='card-img-top' src='https://t4.ftcdn.net/jpg/04/70/29/97/360_F_470299797_UD0eoVMMSUbHCcNJCdv2t8B2g1GVqYgs.jpg' style='width: 300px; padding-top: 10px'>
     {% endif %}
-    <p>{{ selected_listing.description }}</p>
-    <p>Current Price: {{ selected_listing.current_price }} ฿</p>
-    {% if user.is_authenticated %}
-        <form action='{% url "listing_page" selected_listing.id %}' method='post'>
-            {% csrf_token %}
-            {{ bid_form }}
-            <input type='submit'>
-        </form>
-        {% if user == selected_listing.owner %}
-        <form action='{% url "listing_page" selected_listing.id %}' method='post'>
-            {% csrf_token %}
-            <input type='submit', value='close', name='close_auction'>
-        </form>
+    <p style='margin-top: 10px'><b style='color: rgb(58, 106, 203)'>Description:</b> {{ selected_listing.description }}</p>
+    {% if selected_listing.current_price == 0 %}
+    <p style='font-size: 30px; font-weight: bold; color: rgb(58, 106, 203)'>฿ {{ selected_listing.starting_bid }} </p>
+    {% else %}
+    <p style='font-size: 30px; font-weight: bold; color: rgb(58, 106, 203)'>฿ {{ selected_listing.current_price }} </p>
+    {% endif %}
+
+    {% if selected_listing.is_active %}
+        {% if user.is_authenticated %}
+            <form action='{% url "listing_page" selected_listing.id %}' method='post'>
+                {% csrf_token %}
+                {{ bid_form }}
+                <input type='submit' value='Place Bid'>
+            </form>
+            {% if warning %}
+            <div class="alert alert-danger" role="alert">
+                {{ warning }}
+            </div>
+            {% endif %}
         {% endif %}
-        <form action='{% url "listing_page" selected_listing.id %}' method='post'>
-            {% csrf_token %}
-            {{ comment_form }}
-            <input type='submit'>
-        </form>
+        <div>
+            <p style='margin: 0px; margin-top: 15px'><b style='color: rgb(58, 106, 203); font-size: larger'>Details:</b></p>
+                <p style='margin: 0px'>Listed by {{ selected_listing.owner}}</p>
+                <p style='margin: 0px'>Category: {{ selected_listing.category}}</p>
+                {% if selected_listing.winner %}
+                <p>Current highest bidder: {{ selected_listing.winner}} </p>
+                {% else %}
+                <p>Current highest bidder: -</p>
+                {% endif %}
+        </div>
+        {% if all_comment %}
+            <div class='all_comment' style='background-color: rgb(58, 106, 203); padding: 5px; width:500px; margin-top: 15px;'>
+                <p style='text-align: center; font-weight: bold; color: antiquewhite'>Comments</p>
+            {% for comment in all_comment %}
+                <div class='comment' style='background-color: white; padding: 5px; margin-top: 5px; padding-left: 10px'>
+                    <p>{{ comment.comment}} </p>
+                    <p>by {{ comment.commenter }}</p>
+                </div>
+            {% endfor %} 
+            </div>
+        {% endif %}
+        
+        {% if user.is_authenticated %}
+            <form action='{% url "listing_page" selected_listing.id %}' method='post' style='padding-top: 15px'>
+                {% csrf_token %}
+                {{ comment_form }}
+                <input type='submit' value='Add Comment'>
+            </form>
+        {% endif %}
     {% endif %}
-    {% for comment in all_comment %}
-    <p>{{ comment.comment }}</p>
-    {% endfor %}
+    
 
 {% endblock %}

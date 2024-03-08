@@ -9,7 +9,7 @@ from .models import User, Category, AuctionListing, Bid, Comment
 
 class CreateLisingForm(forms.Form):
     title = forms.CharField(label='Title:')
-    description = forms.CharField(widget=forms.Textarea(), label='Description:')
+    description = forms.CharField(widget=forms.Textarea(attrs={'rows':2, 'cols':45}), label='Description:')
     starting_bid = forms.FloatField(label='Starting bid:')
     image_url = forms.URLField(required=False, label='URL for image (optional):')
     category = forms.ChoiceField(widget=forms.Select, choices=[(cat.name, cat.name) for cat in Category.objects.all()], initial=('No category'))
@@ -18,7 +18,7 @@ class CreateBiddingForm(forms.Form):
     bidding_price = forms.FloatField(label='Bidding Price:')
     
 class CreateCommentForm(forms.Form):
-    comment = forms.CharField(widget=forms.Textarea(), label='Comment:')
+    comment = forms.CharField(widget=forms.Textarea(attrs={'rows':2, 'cols':45}), label='Add your comment:')
     
 def index(request):
     return render(request, "auctions/index.html", {
@@ -88,7 +88,7 @@ def create_listing(request):
             category = Category.objects.get(name=form.cleaned_data['category'])
             owner = request.user
             is_active = True
-            new_listing = AuctionListing(title=title, description=description, starting_bid=starting_bid, image_url=image_url, category=category, owner=owner, is_active=is_active, current_price=starting_bid)
+            new_listing = AuctionListing(title=title, description=description, starting_bid=starting_bid, image_url=image_url, category=category, owner=owner, is_active=is_active, current_price=0)
             new_listing.save()
         
            
@@ -101,7 +101,7 @@ def listing_page(request, id):
     user = request.user
     if request.method == 'POST':
         add_remove = request.POST.get('add_remove')
-        if add_remove == 'add':
+        if add_remove == 'add to watchlist':
             selected_listing.watchlist.add(user)
         else:
             selected_listing.watchlist.remove(user)
@@ -109,7 +109,7 @@ def listing_page(request, id):
         form = CreateBiddingForm(request.POST)
         if form.is_valid():
             bidding_price = form.cleaned_data['bidding_price']
-            if bidding_price > selected_listing.current_price:
+            if bidding_price > selected_listing.current_price and bidding_price >= selected_listing.starting_bid:
                 selected_listing.current_price = bidding_price
                 selected_listing.winner = user
                 selected_listing.save()
@@ -117,10 +117,17 @@ def listing_page(request, id):
                 new_bidding = Bid(bidder=bidder, auction_listing=selected_listing, bidding_price=bidding_price)
                 new_bidding.save()
             else:
-                return HttpResponse('no')
+                return render(request, 'auctions/listing_page.html', {
+                    'selected_listing': AuctionListing.objects.get(id=id),
+                    'user': request.user,
+                    'bid_form': CreateBiddingForm(),
+                    'comment_form': CreateCommentForm(),
+                    'all_comment': AuctionListing.objects.get(id=id).from_listing.all(),
+                    'warning': 'Your bid is lower than current price. Try again.'
+                })
             
         close_auction = request.POST.get('close_auction')
-        if close_auction == 'close':
+        if close_auction == 'close this auction':
             selected_listing.is_active = False
             selected_listing.save()
             return HttpResponseRedirect(reverse('index'))
