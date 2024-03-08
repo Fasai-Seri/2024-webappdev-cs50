@@ -15,7 +15,9 @@ class CreateLisingForm(forms.Form):
     category = forms.ChoiceField(widget=forms.Select, choices=[(cat.name, cat.name) for cat in Category.objects.all()])
     
 def index(request):
-    return render(request, "auctions/index.html")
+    return render(request, "auctions/index.html", {
+        'active_listing': AuctionListing.objects.filter(is_active=True)
+    })
 
 
 def login_view(request):
