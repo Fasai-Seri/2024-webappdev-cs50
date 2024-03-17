@@ -47,6 +47,7 @@ function load_mailbox(mailbox) {
   // Show the mailbox and hide other views
   document.querySelector('#emails-view').style.display = 'block';
   document.querySelector('#compose-view').style.display = 'none';
+  document.querySelector('#selected-email-view').style.display = 'none';
 
   // Show the mailbox name
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
@@ -58,14 +59,51 @@ function load_mailbox(mailbox) {
       emails.forEach(email => {
         const email_div = document.createElement('div');
         email_div.innerHTML = 
-        `<span id='sender'>${email.sender}</span>
+        `
+        <span id='sender'>${email.sender}</span>
         <span id='subject'>${email.subject}</span>
-        <span id='timestamp'>${email.timestamp}</span>`
+        <span id='timestamp'>${email.timestamp}</span>
+        `
 
         email_div.className = 'email-div' 
         if (email.read) {
           email_div.classList.add('read')
         }
+        email_div.setAttribute('id', `${email.id}`)
+
+        email_div.addEventListener('click', function(email_div) {
+          document.querySelector('#emails-view').style.display = 'none';
+          document.querySelector('#selected-email-view').style.display = 'block';
+
+          fetch(`/emails/${this.id}`)
+          .then(response => response.json())
+          .then(email => {
+              console.log(email.body);
+
+              document.querySelector('#selected-email-view').innerHTML = 
+              `
+              <div id='header'>
+                <p><b>From: </b>${email.sender}</p>
+                <p><b>To: </b>${email.recipients}</p>
+                <p><b>Subject: </b>${email.subject}</p>
+                <p><b>Timestamp: </b>${email.timestamp}</p>
+                <button>Reply</button>
+              </div>
+              <hr>
+              <div id='body'>
+                <p>${email.body}</p>
+              </div>
+              `
+          });
+
+          fetch(`/emails/${this.id}`, {
+            method: 'PUT',
+            body: JSON.stringify({
+                read: true
+            })
+          })
+
+        });
 
         document.querySelector('#emails-view').append(email_div);
       })
