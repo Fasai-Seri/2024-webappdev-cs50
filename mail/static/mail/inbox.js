@@ -62,7 +62,10 @@ function load_mailbox(mailbox) {
         <span id='subject'>${email.subject}</span>
         <span id='timestamp'>${email.timestamp}</span>`
 
-        email_div.className = 'email-div'
+        email_div.className = 'email-div' 
+        if (email.read) {
+          email_div.classList.add('read')
+        }
 
         document.querySelector('#emails-view').append(email_div);
       })
