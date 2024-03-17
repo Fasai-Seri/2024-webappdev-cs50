@@ -50,4 +50,22 @@ function load_mailbox(mailbox) {
 
   // Show the mailbox name
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
+
+  fetch(`/emails/${mailbox}`)
+  .then(response => response.json())
+  .then(emails => {
+      console.log(emails);
+      emails.forEach(email => {
+        const email_div = document.createElement('div');
+        email_div.innerHTML = 
+        `<span id='sender'>${email.sender}</span>
+        <span id='subject'>${email.subject}</span>
+        <span id='timestamp'>${email.timestamp}</span>`
+
+        email_div.className = 'email-div'
+
+        document.querySelector('#emails-view').append(email_div);
+      })
+      
+  });
 }

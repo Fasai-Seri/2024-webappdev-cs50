@@ -1,3 +1,18 @@
 textarea {
     min-height: 400px;
 }
+
+#sender {
+    font-weight: bold;
+}
+
+#timestamp {
+    color: grey; 
+    float: right;
+}
+
+.email-div {
+    border: 1px grey solid;
+    padding: 5px 10px;
+    margin: 5px 0px
+}
