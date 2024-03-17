@@ -13,8 +13,10 @@ textarea {
 
 .email-div {
     border: 1px grey solid;
-    padding: 5px 10px;
-    margin: 5px 0px
+    padding: 5px 5px;
+    margin: 5px 0px;
+    display: inline-block;
+    width: 80%;
 }
 
 .read {

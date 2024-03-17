@@ -51,27 +51,53 @@ function load_mailbox(mailbox) {
 
   // Show the mailbox name
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
-
+  
   fetch(`/emails/${mailbox}`)
   .then(response => response.json())
   .then(emails => {
-      console.log(emails);
+
       emails.forEach(email => {
         const email_div = document.createElement('div');
-        email_div.innerHTML = 
-        `
-        <span id='sender'>${email.sender}</span>
-        <span id='subject'>${email.subject}</span>
-        <span id='timestamp'>${email.timestamp}</span>
-        `
 
-        email_div.className = 'email-div' 
-        if (email.read) {
-          email_div.classList.add('read')
+        if (mailbox === 'inbox') {
+          email_div.innerHTML = 
+          `
+          <button class='archive-button' id=${email.id}>Archive</button>
+          <div id=${email.id} class='email-div'>
+            <span id='sender'>${email.sender}</span>
+            <span id='subject'>${email.subject}</span>
+            <span id='timestamp'>${email.timestamp}</span>
+          </div>
+          `
         }
-        email_div.setAttribute('id', `${email.id}`)
+        
+        else if (mailbox === 'archive') {
+          email_div.innerHTML = 
+          `
+          <button class='unarchive-button' id=${email.id}>Unarchive</button>
+          <div id=${email.id} class='email-div'>
+            <span id='sender'>${email.sender}</span>
+            <span id='subject'>${email.subject}</span>
+            <span id='timestamp'>${email.timestamp}</span>
+          </div>
+          `
+        }
 
-        email_div.addEventListener('click', function(email_div) {
+        else {
+          email_div.innerHTML = 
+          `
+          <div id=${email.id} class='email-div'>
+            <span id='sender'>${email.sender}</span>
+            <span id='subject'>${email.subject}</span>
+            <span id='timestamp'>${email.timestamp}</span>
+          </div>
+          `
+        }
+        if (email.read) {
+          email_div.querySelector('div').classList.add('read')
+        }
+
+        email_div.querySelector('div').addEventListener('click', function() {
           document.querySelector('#emails-view').style.display = 'none';
           document.querySelector('#selected-email-view').style.display = 'block';
 
@@ -79,7 +105,7 @@ function load_mailbox(mailbox) {
           .then(response => response.json())
           .then(email => {
               console.log(email.body);
-
+              
               document.querySelector('#selected-email-view').innerHTML = 
               `
               <div id='header'>
@@ -106,7 +132,33 @@ function load_mailbox(mailbox) {
         });
 
         document.querySelector('#emails-view').append(email_div);
+
+        document.querySelectorAll('.archive-button').forEach((button) => {
+          button.onclick = () => {
+            // console.log('archive')
+            
+            fetch(`/emails/${button.id}`, {
+              method: 'PUT',
+              body: JSON.stringify({
+                  archived: true
+              })   
+            })
+            load_mailbox('inbox')
+          }
+        })
+
+        document.querySelectorAll('.unarchive-button').forEach((button) => {
+          button.onclick = () => {
+
+            fetch(`/emails/${button.id}`, {
+              method: 'PUT',
+              body: JSON.stringify({
+                  archived: false
+              })
+            })
+            // load_mailbox('inbox');
+          }
+        })
       })
-      
   });
 }
