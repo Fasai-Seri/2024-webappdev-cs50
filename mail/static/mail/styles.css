@@ -26,3 +26,7 @@ textarea {
 #body>p {
     white-space: pre-line;
 }
+
+.archive-button, .archive-button {
+    margin-bottom: 5px;
+}

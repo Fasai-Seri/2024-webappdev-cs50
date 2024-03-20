@@ -83,7 +83,7 @@ function load_mailbox(mailbox) {
         if (mailbox === 'inbox') {
           email_div.innerHTML = 
           `
-          <button class='archive-button' id=${email.id}>Archive</button>
+          <button class='archive-button btn btn-sm btn-outline-secondary' id=${email.id}>Archive</button>
           <div id=${email.id} class='email-div'>
             <span id='sender'>${email.sender}</span>
             <span id='subject'>${email.subject}</span>
@@ -95,7 +95,7 @@ function load_mailbox(mailbox) {
         else if (mailbox === 'archive') {
           email_div.innerHTML = 
           `
-          <button class='unarchive-button' id=${email.id}>Unarchive</button>
+          <button class='unarchive-button btn btn-sm btn-outline-secondary' id=${email.id}>Unarchive</button>
           <div id=${email.id} class='email-div'>
             <span id='sender'>${email.sender}</span>
             <span id='subject'>${email.subject}</span>
