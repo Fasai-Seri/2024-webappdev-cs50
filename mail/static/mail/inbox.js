@@ -24,6 +24,7 @@ function compose_email() {
   document.querySelector('#compose-body').value = '';
   document.querySelector('#menu-name').innerHTML = 'New Email';
   document.querySelector('#compose-recipients').disabled = false;
+  document.querySelector('#error-warning').innerHTML = '';
 
 
   
@@ -159,7 +160,8 @@ function load_mailbox(mailbox) {
                   } else {
                     document.querySelector('#compose-subject').value = email.subject
                   }
-                  document.querySelector('#compose-body').value = `\n\nOn ${email.timestamp} ${email.sender} wrote:\n${email.body}`
+                  document.querySelector('#compose-body').value = 
+                  `\n\n-----------------------------------------------------------\nOn ${email.timestamp} ${email.sender} wrote:\n${email.body}`
                   
                   console.log(document.querySelector('h3'));
                   // ... do something else with email ...
