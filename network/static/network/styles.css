@@ -1,0 +1,14 @@
+#new-post {
+    padding: 20px 20px;
+    margin: 0px 10px;
+    border: 1px solid rgb(205, 205, 205);
+    border-radius: 5px;
+}
+
+.submit-button {
+    margin-top: 5px;
+}
+
+h1 {
+    margin-top: 8px;
+}
