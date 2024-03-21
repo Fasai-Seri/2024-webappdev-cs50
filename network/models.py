@@ -11,4 +11,7 @@ class Post(models.Model):
     poster = models.ForeignKey(User, related_name='post', on_delete=models.CASCADE)
     content = models.TextField()
     timestamp = models.DateTimeField()
-    like_user = models.ManyToManyField(User, related_name='liked_post')
+    like_user = models.ManyToManyField(User, related_name='liked_post', blank=True)
+    
+    def __str__(self):
+        return f'{self.timestamp} by {self.poster}'

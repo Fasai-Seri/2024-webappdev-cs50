@@ -4,10 +4,18 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User
-
+from .models import User, Post
+from datetime import datetime
 
 def index(request):
+    if request.method == 'POST':
+        poster = request.user
+        content = request.POST['content']
+        timestamp = datetime.now()
+        new_post = Post(poster=poster, content=content, timestamp=timestamp)
+        new_post.save()    
+        return HttpResponse('save')
+    
     return render(request, "network/index.html")
 
 
