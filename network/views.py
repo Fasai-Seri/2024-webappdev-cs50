@@ -14,9 +14,10 @@ def index(request):
         timestamp = datetime.now()
         new_post = Post(poster=poster, content=content, timestamp=timestamp)
         new_post.save()    
-        return HttpResponse('save')
-    
-    return render(request, "network/index.html")
+
+    return render(request, "network/index.html", {
+        'all_post': Post.objects.all(),
+    })
 
 
 def login_view(request):

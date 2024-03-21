@@ -12,3 +12,14 @@
 h1 {
     margin-top: 8px;
 }
+
+.post {
+    padding: 10px 20px 0px 20px;
+    margin: 10px 10px;
+    border: 1px solid rgb(205, 205, 205);
+    border-radius: 5px;
+}
+
+h6 {
+    font-size: larger;
+}
