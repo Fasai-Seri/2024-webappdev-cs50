@@ -22,17 +22,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     content: post.querySelector('textarea').value
                 })
             })
-            .then(() => {
-                fetch(`/posts/${post.id}`)
-                .then(response => response.json())
-                .then(get_post => {
-                    post.querySelector('.content').innerHTML = get_post.content
-                })
-            })
+            post.querySelector('.content').innerHTML = post.querySelector('textarea').value
             post.querySelector('.edit-form').style.display = 'none'
-            post.querySelector('.content').style.display = 'block'
-            console.log(post.querySelector('textarea').innerHTML)
-            
+            post.querySelector('.content').style.display = 'block'            
         }
     })
 })
