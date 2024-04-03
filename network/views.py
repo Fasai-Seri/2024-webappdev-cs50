@@ -67,6 +67,10 @@ def post(request, post_id):
         data = json.loads(request.body)
         if data.get("content") is not None:
             post.content = data["content"]
+        if data.get("add_like_user") is not None:
+            post.like_user.add(request.user)
+        if data.get("remove_like_user") is not None:
+            post.like_user.remove(request.user)
         post.save()
         return HttpResponse(status=204)
 
@@ -78,6 +82,9 @@ def post(request, post_id):
 def my_posts(request):
     return JsonResponse([post.serialize() for post in Post.objects.filter(poster=request.user)], safe=False)
        
+def like_posts(request):
+    return JsonResponse([post.serialize() for post in request.user.liked_post.all()], safe=False)
+    
 def login_view(request):
     if request.method == "POST":
 

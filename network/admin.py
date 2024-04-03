@@ -9,6 +9,7 @@ class UserAdmin(admin.ModelAdmin):
     
 class PostAdmin(admin.ModelAdmin):
     readonly_fields = ('id',)
+    filter_horizontal = ('like_user',)
     
 admin.site.register(User, UserAdmin)
 admin.site.register(Post, PostAdmin)
