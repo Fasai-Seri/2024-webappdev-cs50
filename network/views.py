@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User, Post
+from .models import *
 from datetime import datetime
 
 def index(request):
@@ -20,15 +20,22 @@ def index(request):
     })
 
 def profile(request, username):
+    
+    followed_user = User.objects.get(username=username)
+    following_user = request.user
+    relationship = FollowingRelationship(followed_user=followed_user, following_user=following_user)
+    
     if request.method == 'POST':
+        
         if request.POST.get('follow_unfollow','') == 'Follow':
-            User.objects.get(username=username).following.add(request.user)
+            relationship.save()
         elif request.POST.get('follow_unfollow','') == 'Unfollow':
-            User.objects.get(username=username).following.remove(request.user)
+            FollowingRelationship.objects.filter(followed_user=followed_user, following_user=following_user).delete()
+
     
     return render(request, 'network/profile.html', {
         'selected_user': User.objects.get(username=username),
-        'following_list': request.user.following.all(),
+        'is_following': relationship in FollowingRelationship.objects.all(),
     })
 
 def login_view(request):
