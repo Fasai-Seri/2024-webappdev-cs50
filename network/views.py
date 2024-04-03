@@ -11,8 +11,8 @@ def index(request):
     if request.method == 'POST':
         poster = request.user
         content = request.POST['content']
-        timestamp = datetime.now()
-        new_post = Post(poster=poster, content=content, timestamp=timestamp)
+        posted_timestamp = datetime.now()
+        new_post = Post(poster=poster, content=content, posted_timestamp=posted_timestamp)
         new_post.save()    
 
     return render(request, "network/index.html", {
@@ -38,6 +38,12 @@ def profile(request, username):
         'following_number': len(FollowingRelationship.objects.filter(following_user=selected_user)),
         'followed_number': len(FollowingRelationship.objects.filter(followed_user=selected_user)),
         'all_post': Post.objects.filter(poster=selected_user)
+    })
+    
+def following(request):
+    followed_user = FollowingRelationship.objects.filter(following_user=request.user).values_list('followed_user')
+    return render(request, 'network/following.html', {
+        'all_post': Post.objects.filter(poster__in=followed_user)
     })
 
 def login_view(request):
