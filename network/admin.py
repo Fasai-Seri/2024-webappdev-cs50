@@ -7,6 +7,9 @@ from .models import *
 class UserAdmin(admin.ModelAdmin):
     readonly_fields = ('id',)
     
+class PostAdmin(admin.ModelAdmin):
+    readonly_fields = ('id',)
+    
 admin.site.register(User, UserAdmin)
-admin.site.register(Post)
+admin.site.register(Post, PostAdmin)
 admin.site.register(FollowingRelationship)
