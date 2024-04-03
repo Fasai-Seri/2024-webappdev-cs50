@@ -1,4 +1,9 @@
 {% extends "network/layout.html" %}
+{% load static %}
+
+{% block script %}
+    <script src="{% static 'network/index.js' %}"></script>
+{% endblock %}
 
 {% block body %}
 <h1>All Posts</h1>
@@ -15,9 +20,18 @@
 {% endif %}
 
 {% for post in all_post %}
-<div class='post'>
+<div id={{ post.id }} class='post'>
     <h6><a href="{% url 'profile' post.poster.username %}">{{ post.poster.username }}</a></h6>
-    <p>Edit<br />{{ post.content }}<br />{{ post.posted_timestamp }}<br />{{ post.like_user.count }}<br />Comment</p>
+    <p class='edit-button'>Edit</p>
+    <p class='content'>{{ post.content }}</p>
+    <form id={{ post.id }} class="edit-form">
+        <textarea class="form-control" id="edit-content">{{ post.content }}</textarea>
+        <input type="button" class="btn btn-primary" id='submit-button' onsubmit="return false" value="Submit"/>
+    </form>
+    <p>{{ post.posted_timestamp }}</p>
+    <p>{{ post.like_user.count }}</p>
+    <p>Comment</p>
 </div>
 {% endfor %}
 {% endblock %}
+

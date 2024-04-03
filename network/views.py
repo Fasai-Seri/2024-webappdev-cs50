@@ -5,6 +5,9 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
+
 
 from .models import *
 from datetime import datetime
@@ -48,6 +51,8 @@ def following(request):
         'all_post': Post.objects.filter(poster__in=followed_user)
     })
 
+@csrf_exempt
+@login_required
 def post(request, post_id):
 
     try:
