@@ -9,7 +9,7 @@ class Post(models.Model):
     id = models.AutoField(primary_key=True)
     poster = models.ForeignKey(User, related_name='post', on_delete=models.CASCADE)
     content = models.TextField()
-    timestamp = models.DateTimeField()
+    posted_timestamp = models.DateTimeField()
     like_user = models.ManyToManyField(User, related_name='liked_post', blank=True)
     
     def __str__(self):

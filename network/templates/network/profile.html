@@ -5,10 +5,9 @@
     <h2>Profile</h2>
 
     {{ selected_user }}
-    {{ is_following }}
-    {{ test1 }}
-    {{ test2 }}
-    
+    <p>Following {{ following_number }}</p>
+    <p>Followed {{ followed_number }}</p>
+
     {% if user.is_authenticated and selected_user != request.user %}
     <form action='{% url "profile" selected_user.username %}' method='post'>
         {% csrf_token %}
@@ -19,4 +18,12 @@
         {% endif %} 
     </form>
     {% endif %}
+
+    {% for post in all_post %}
+    <div class='post'>
+        <h6><a href="{% url 'profile' post.poster.username %}">{{ post.poster.username }}</a></h6>
+        <p>Edit<br />{{ post.content }}<br />{{ post.posted_timestamp }}<br />{{ post.like_user.count }}<br />Comment</p>
+    </div>
+    {% endfor %}
+    
 {% endblock %}

@@ -16,25 +16,28 @@ def index(request):
         new_post.save()    
 
     return render(request, "network/index.html", {
-        'all_post': Post.objects.all(),
+        'all_post': Post.objects.all().order_by('-posted_timestamp'),
     })
 
 def profile(request, username):
     
-    followed_user = User.objects.get(username=username)
-    following_user = request.user
+    selected_user = User.objects.get(username=username)
+    current_login_user = request.user
     
     if request.method == 'POST':
-        relationship = FollowingRelationship(followed_user=followed_user, following_user=following_user)
+        relationship = FollowingRelationship(followed_user=selected_user, following_user=current_login_user)
         if request.POST.get('follow_unfollow','') == 'Follow':
             relationship.save()
         elif request.POST.get('follow_unfollow','') == 'Unfollow':
-            FollowingRelationship.objects.filter(followed_user=followed_user, following_user=following_user).delete()
+            FollowingRelationship.objects.filter(followed_user=selected_user, following_user=current_login_user).delete()
 
     
     return render(request, 'network/profile.html', {
-        'selected_user': User.objects.get(username=username),
-        'is_following': FollowingRelationship.objects.filter(followed_user=followed_user, following_user=following_user),
+        'selected_user': selected_user,
+        'is_following': FollowingRelationship.objects.filter(followed_user=selected_user, following_user=current_login_user),
+        'following_number': len(FollowingRelationship.objects.filter(following_user=selected_user)),
+        'followed_number': len(FollowingRelationship.objects.filter(followed_user=selected_user)),
+        'all_post': Post.objects.filter(poster=selected_user)
     })
 
 def login_view(request):
