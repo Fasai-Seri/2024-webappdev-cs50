@@ -3,13 +3,24 @@ document.addEventListener('DOMContentLoaded', () => {
         form.style.display = 'none' 
     })
 
+    fetch(`/my_posts`)
+    .then(response => response.json())
+    .then(post => {
+        my_posts_id = post.map(({id})=>id)
+        document.querySelectorAll('.edit-button').forEach((button) => {
+            console.log((my_posts_id.includes(Number(button.parentNode.id))))
+            if ((my_posts_id.includes(Number(button.parentNode.id)))) {
+                button.style.display = 'block'
+            }
+        })
+    })
+     
     document.querySelectorAll('.edit-button').forEach((button) => {
-        button.onclick = () => {
-            const clicked_post = button.parentNode
-            // console.log(button.parentNode.id)
-            // console.log(button.parentNode.querySelector('.content'))
-            clicked_post.querySelector('.edit-form').style.display = 'block'
-            clicked_post.querySelector('.content').style.display = 'none'
+        const post = button.parentNode
+
+        button.onclick = () => {        
+            post.querySelector('.edit-form').style.display = 'block'
+            post.querySelector('.content').style.display = 'none'
         }
     })
 

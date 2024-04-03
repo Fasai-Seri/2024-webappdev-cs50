@@ -23,3 +23,7 @@ h1 {
 h6 {
     font-size: larger;
 }
+
+.edit-button {
+    display: none;
+}

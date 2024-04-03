@@ -74,7 +74,10 @@ def post(request, post_id):
         return JsonResponse({
             "error": "GET or PUT request required."
         }, status=400)
-    
+
+def my_posts(request):
+    return JsonResponse([post.serialize() for post in Post.objects.filter(poster=request.user)], safe=False)
+       
 def login_view(request):
     if request.method == "POST":
 

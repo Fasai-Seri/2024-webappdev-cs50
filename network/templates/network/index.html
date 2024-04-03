@@ -22,7 +22,7 @@
 {% for post in all_post %}
 <div id={{ post.id }} class='post'>
     <h6><a href="{% url 'profile' post.poster.username %}">{{ post.poster.username }}</a></h6>
-    <p class='edit-button'>Edit</p>
+    <button class='edit-button' style='display: none'>Edit</button>
     <p class='content'>{{ post.content }}</p>
     <form id={{ post.id }} class="edit-form">
         <textarea class="form-control" id="edit-content">{{ post.content }}</textarea>
