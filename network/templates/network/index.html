@@ -16,7 +16,7 @@
 
 {% for post in all_post %}
 <div class='post'>
-    <h6>{{ post.poster.username }}</h6>
+    <h6><a href="{% url 'profile' post.poster.username %}">{{ post.poster.username }}</a></h6>
     <p>Edit<br />{{ post.content }}<br />{{ post.timestamp }}<br />{{ post.like_user.count }}<br />Comment</p>
 </div>
 {% endfor %}

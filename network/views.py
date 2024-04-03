@@ -19,6 +19,17 @@ def index(request):
         'all_post': Post.objects.all(),
     })
 
+def profile(request, username):
+    if request.method == 'POST':
+        if request.POST.get('follow_unfollow','') == 'Follow':
+            User.objects.get(username=username).following.add(request.user)
+        elif request.POST.get('follow_unfollow','') == 'Unfollow':
+            User.objects.get(username=username).following.remove(request.user)
+    
+    return render(request, 'network/profile.html', {
+        'selected_user': User.objects.get(username=username),
+        'following_list': request.user.following.all(),
+    })
 
 def login_view(request):
     if request.method == "POST":
