@@ -9,6 +9,10 @@
     display: block;
 }
 
+.edit-button {
+    display: none;
+}
+
 h1 {
     margin-top: 8px;
 }
@@ -24,6 +28,6 @@ h6 {
     font-size: larger;
 }
 
-.edit-button {
-    display: none;
+img {
+    height: 20px;
 }

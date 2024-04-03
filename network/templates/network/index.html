@@ -29,7 +29,12 @@
         <input type="button" class="btn btn-primary" id='submit-button' onsubmit="return false" value="Submit"/>
     </form>
     <p>{{ post.posted_timestamp }}</p>
-    <p>{{ post.like_user.count }}</p>
+    {% if user in post.like_user %}
+    <img id='like-button' src='https://icons.iconarchive.com/icons/designbolts/free-valentine-heart/256/Heart-icon.png' style='height: 20px'>{{ post.like_user.count }}
+    {% else %}
+    <img id='unlike-button' src='https://cdn-icons-png.freepik.com/256/1077/1077035.png' style='height: 20px'>
+    <span>{{ post.like_user.count }}</span>
+    {% endif %}
     <p>Comment</p>
 </div>
 {% endfor %}
