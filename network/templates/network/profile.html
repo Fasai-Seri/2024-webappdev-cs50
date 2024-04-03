@@ -5,7 +5,10 @@
     <h2>Profile</h2>
 
     {{ selected_user }}
-
+    {{ is_following }}
+    {{ test1 }}
+    {{ test2 }}
+    
     {% if user.is_authenticated and selected_user != request.user %}
     <form action='{% url "profile" selected_user.username %}' method='post'>
         {% csrf_token %}

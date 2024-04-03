@@ -23,10 +23,9 @@ def profile(request, username):
     
     followed_user = User.objects.get(username=username)
     following_user = request.user
-    relationship = FollowingRelationship(followed_user=followed_user, following_user=following_user)
     
     if request.method == 'POST':
-        
+        relationship = FollowingRelationship(followed_user=followed_user, following_user=following_user)
         if request.POST.get('follow_unfollow','') == 'Follow':
             relationship.save()
         elif request.POST.get('follow_unfollow','') == 'Unfollow':
@@ -35,7 +34,7 @@ def profile(request, username):
     
     return render(request, 'network/profile.html', {
         'selected_user': User.objects.get(username=username),
-        'is_following': relationship in FollowingRelationship.objects.all(),
+        'is_following': FollowingRelationship.objects.filter(followed_user=followed_user, following_user=following_user),
     })
 
 def login_view(request):
