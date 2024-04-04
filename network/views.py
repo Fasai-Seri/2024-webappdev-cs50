@@ -33,26 +33,34 @@ def index(request):
 def profile(request, username):
     
     selected_user = User.objects.get(username=username)
-    current_login_user = request.user
-    
-    if request.method == 'POST':
-        relationship = FollowingRelationship(followed_user=selected_user, following_user=current_login_user)
-        if request.POST.get('follow_unfollow','') == 'Follow':
-            relationship.save()
-        elif request.POST.get('follow_unfollow','') == 'Unfollow':
-            FollowingRelationship.objects.filter(followed_user=selected_user, following_user=current_login_user).delete()
-
     all_post = Post.objects.filter(poster=selected_user).order_by('-posted_timestamp')
     paginator = Paginator(all_post, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    return render(request, 'network/profile.html', {
-        'page_obj': page_obj,
-        'selected_user': selected_user,
-        'is_following': FollowingRelationship.objects.filter(followed_user=selected_user, following_user=current_login_user),
-        'following_number': len(FollowingRelationship.objects.filter(following_user=selected_user)),
-        'followed_number': len(FollowingRelationship.objects.filter(followed_user=selected_user)),
-    })
+    
+    if request.user.id == None:
+        return render(request, 'network/profile.html', {
+            'page_obj': page_obj,
+            'selected_user': selected_user,
+        })
+        
+    else:
+        current_login_user = request.user
+            
+        if request.method == 'POST':
+            relationship = FollowingRelationship(followed_user=selected_user, following_user=current_login_user)
+            if request.POST.get('follow_unfollow','') == 'Follow':
+                relationship.save()
+            elif request.POST.get('follow_unfollow','') == 'Unfollow':
+                FollowingRelationship.objects.filter(followed_user=selected_user, following_user=current_login_user).delete()
+        
+        return render(request, 'network/profile.html', {
+            'page_obj': page_obj,
+            'selected_user': selected_user,
+            'is_following': FollowingRelationship.objects.filter(followed_user=selected_user, following_user=current_login_user),
+            'following_number': len(FollowingRelationship.objects.filter(following_user=selected_user)),
+            'followed_number': len(FollowingRelationship.objects.filter(followed_user=selected_user)),
+        })
     
 def following(request):
     followed_user = FollowingRelationship.objects.filter(following_user=request.user).values_list('followed_user')
