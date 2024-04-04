@@ -7,6 +7,8 @@ from django.urls import reverse
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
+
 
 
 from .models import *
@@ -20,8 +22,12 @@ def index(request):
         new_post = Post(poster=poster, content=content, posted_timestamp=posted_timestamp)
         new_post.save()    
 
-    return render(request, "network/index.html", {
-        'all_post': Post.objects.all().order_by('-posted_timestamp'),
+    all_post = Post.objects.all().order_by('-posted_timestamp')
+    paginator = Paginator(all_post, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'network/index.html', {
+        'page_obj': page_obj
     })
 
 def profile(request, username):
@@ -36,19 +42,26 @@ def profile(request, username):
         elif request.POST.get('follow_unfollow','') == 'Unfollow':
             FollowingRelationship.objects.filter(followed_user=selected_user, following_user=current_login_user).delete()
 
-    
+    all_post = Post.objects.filter(poster=selected_user).order_by('-posted_timestamp')
+    paginator = Paginator(all_post, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
     return render(request, 'network/profile.html', {
+        'page_obj': page_obj,
         'selected_user': selected_user,
         'is_following': FollowingRelationship.objects.filter(followed_user=selected_user, following_user=current_login_user),
         'following_number': len(FollowingRelationship.objects.filter(following_user=selected_user)),
         'followed_number': len(FollowingRelationship.objects.filter(followed_user=selected_user)),
-        'all_post': Post.objects.filter(poster=selected_user)
     })
     
 def following(request):
     followed_user = FollowingRelationship.objects.filter(following_user=request.user).values_list('followed_user')
+    all_post = Post.objects.filter(poster__in=followed_user).order_by('-posted_timestamp')
+    paginator = Paginator(all_post, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
     return render(request, 'network/following.html', {
-        'all_post': Post.objects.filter(poster__in=followed_user)
+        'page_obj': page_obj,
     })
 
 @csrf_exempt
