@@ -7,70 +7,72 @@
 
 {% block body %}
 
-    <h1>Following</h1>
-    <hr>
+<h1>Following</h1>
+<hr>
 
-    <nav>
-        <ul class="pagination">
-            {% if page_obj.has_previous %}
-            <li class="page-item">
-                <a class="page-link" href="{% url 'following' %}?page={{ page_obj.previous_page_number }}">Previous</a>
-            </li>
-            {% else %}
-            <li class="page-item disabled">
-                <span class="page-link">Previous</span>
-            </li>
-            {% endif %}
-            
-            {% if page_obj.has_next %}
-            <li class="page-item">
-                <a class="page-link" href="{% url 'following' %}?page={{ page_obj.next_page_number }}">Next</a>
-            </li>
-            {% else %}
-            <li class="page-item disabled">
-                <span class="page-link">Next</span>
-            </li>
-            {% endif %}
-        </ul>
-    </nav>
+<nav>
+    <ul class="pagination">
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="{% url 'following' %}?page={{ page_obj.previous_page_number }}">Previous</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <span class="page-link">Previous</span>
+        </li>
+        {% endif %}
+        
+        {% if page_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="{% url 'following' %}?page={{ page_obj.next_page_number }}">Next</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <span class="page-link">Next</span>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+<p class='page-number'>{{ page_obj }}</p>
 
-    {% for post in page_obj %}
-    <div id={{ post.id }} class='post'>
-        <h6><a href="{% url 'profile' post.poster.username %}">{{ post.poster.username }}</a></h6>
-        <p class='content'>{{ post.content }}</p>
-        <p>{{ post.posted_timestamp }}</p>
+{% for post in page_obj %}
+<div id={{ post.id }} class='post'>
+    <h6><a href="{% url 'profile' post.poster.username %}">{{ post.poster.username }}</a></h6>
+    <p class='content'>{{ post.content }}</p>
+    <p>{{ post.posted_timestamp }}</p>
 
-        <img id='unlike-button' src='https://icons.iconarchive.com/icons/designbolts/free-valentine-heart/256/Heart-icon.png'>
+    <img id='unlike-button' src='https://icons.iconarchive.com/icons/designbolts/free-valentine-heart/256/Heart-icon.png'>
 
-        <img id='like-button' src='https://cdn-icons-png.freepik.com/256/1077/1077035.png'>
+    <img id='like-button' src='https://cdn-icons-png.freepik.com/256/1077/1077035.png'>
 
-        <span id='sum-like'>{{ post.like_user.count }}</span>
-        <p>Comment</p>
-    </div>
-    {% endfor %}
+    <span id='sum-like'>{{ post.like_user.count }}</span>
+    <p>Comment</p>
+</div>
+{% endfor %}
 
-    <nav>
-        <ul class="pagination">
-            {% if page_obj.has_previous %}
-            <li class="page-item">
-                <a class="page-link" href="{% url 'following' %}?page={{ page_obj.previous_page_number }}">Previous</a>
-            </li>
-            {% else %}
-            <li class="page-item disabled">
-                <span class="page-link">Previous</span>
-            </li>
-            {% endif %}
-            
-            {% if page_obj.has_next %}
-            <li class="page-item">
-                <a class="page-link" href="{% url 'following' %}?page={{ page_obj.next_page_number }}">Next</a>
-            </li>
-            {% else %}
-            <li class="page-item disabled">
-                <span class="page-link">Next</span>
-            </li>
-            {% endif %}
-        </ul>
-    </nav>
+<p class='page-number'>{{ page_obj }}</p>
+<nav>
+    <ul class="pagination">
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="{% url 'following' %}?page={{ page_obj.previous_page_number }}">Previous</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <span class="page-link">Previous</span>
+        </li>
+        {% endif %}
+        
+        {% if page_obj.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="{% url 'following' %}?page={{ page_obj.next_page_number }}">Next</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <span class="page-link">Next</span>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
     
 {% endblock %}

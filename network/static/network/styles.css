@@ -19,6 +19,7 @@
 
 h1 {
     margin-top: 8px;
+    margin-left: 10px;
 }
 
 .post {
@@ -65,8 +66,13 @@ nav {
     color: #007BFF;
 }
 
-.number {
+.follow-number {
     font-size: 30px;
+}
+
+.page-number {
+    text-align: right;
+    margin: 0px 10px;
 }
 
 
