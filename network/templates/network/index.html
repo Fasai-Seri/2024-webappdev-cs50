@@ -54,10 +54,13 @@
     </form>
     <p>{{ post.posted_timestamp }}</p>
 
+    {% if user.is_authenticated %}
     <img id='unlike-button' src='https://icons.iconarchive.com/icons/designbolts/free-valentine-heart/256/Heart-icon.png' style='height: 20px'>
 
     <img id='like-button' src='https://cdn-icons-png.freepik.com/256/1077/1077035.png' style='height: 20px'>
-
+    {% else %}
+    <img src='https://w7.pngwing.com/pngs/89/299/png-transparent-united-kingdom-promotion-time-product-lining-grey-heart-s-love-angle-heart-thumbnail.png' style='height: 20px'>
+    {% endif %}
     <span id='sum-like'>{{ post.like_user.count }}</span>
     <p>Comment</p>
 </div>

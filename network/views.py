@@ -42,6 +42,8 @@ def profile(request, username):
         return render(request, 'network/profile.html', {
             'page_obj': page_obj,
             'selected_user': selected_user,
+            'following_number': len(FollowingRelationship.objects.filter(following_user=selected_user)),
+            'followed_number': len(FollowingRelationship.objects.filter(followed_user=selected_user)),
         })
         
     else:
