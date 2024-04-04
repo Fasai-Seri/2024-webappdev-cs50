@@ -5,12 +5,16 @@
     border-radius: 5px;
 }
 
-.submit-button {
+.submit-new-post-button {
     display: block;
+    margin-top: 5px;
 }
 
 .edit-button {
     display: none;
+    padding: 4px 6px;
+    font-size: smaller;
+    margin-bottom: 5px;
 }
 
 h1 {
@@ -31,3 +35,38 @@ h6 {
 img {
     height: 20px;
 }
+
+.pagination {
+    justify-content: flex-end;
+    margin: 8px 0px;
+}
+
+nav {
+    margin: 0px 10px;
+}
+
+#submit-button {
+    margin-top: 5px;
+}
+
+#details {
+    margin: 0px 10px;
+    text-align: center;
+}
+
+#details p {
+    width: 120px;
+    height: 90px;
+    display: inline-block;
+    border: 2px solid #007BFF;
+    margin: 10px 5px;
+    padding-top: 9px;
+    border-radius: 10px;
+    color: #007BFF;
+}
+
+.number {
+    font-size: 30px;
+}
+
+

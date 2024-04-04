@@ -8,6 +8,7 @@
 {% block body %}
 
     <h1>Following</h1>
+    <hr>
 
     <nav>
         <ul class="pagination">
@@ -39,9 +40,9 @@
         <p class='content'>{{ post.content }}</p>
         <p>{{ post.posted_timestamp }}</p>
 
-        <img id='unlike-button' src='https://icons.iconarchive.com/icons/designbolts/free-valentine-heart/256/Heart-icon.png' style='height: 20px'>
+        <img id='unlike-button' src='https://icons.iconarchive.com/icons/designbolts/free-valentine-heart/256/Heart-icon.png'>
 
-        <img id='like-button' src='https://cdn-icons-png.freepik.com/256/1077/1077035.png' style='height: 20px'>
+        <img id='like-button' src='https://cdn-icons-png.freepik.com/256/1077/1077035.png'>
 
         <span id='sum-like'>{{ post.like_user.count }}</span>
         <p>Comment</p>

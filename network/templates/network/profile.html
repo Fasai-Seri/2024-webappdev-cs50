@@ -7,23 +7,25 @@
 
 {% block body %}
 
-    <h2>Profile</h2>
+    <h1>Profile</h1>
+    <hr>
+    <div id='details'>
+        <h2>Username: {{ selected_user.username }}</h2>
 
-    {{ selected_user }}
-    <p>Following {{ following_number }}</p>
-    <p>Followed {{ followed_number }}</p>
+        <p><b>Following</b><br /><b class='number'>{{ following_number }}</b></p>
+        <p><b>Followed</b><br /><b class='number'>{{ followed_number }}</b></p>
 
-    {% if user.is_authenticated and selected_user != request.user %}
-    <form action='{% url "profile" selected_user.username %}' method='post'>
-        {% csrf_token %}
-        {% if is_following %}
-        <input type='submit' value='Unfollow' name='follow_unfollow'>
-        {% else %}
-        <input type='submit' value='Follow' name='follow_unfollow'>
-        {% endif %} 
-    </form>
-    {% endif %}
-    
+        {% if user.is_authenticated and selected_user != request.user %}
+        <form action='{% url "profile" selected_user.username %}' method='post'>
+            {% csrf_token %}
+            {% if is_following %}
+            <input type='submit' value='Unfollow' name='follow_unfollow' class='btn btn-primary'>
+            {% else %}
+            <input type='submit' value='Follow' name='follow_unfollow' class='btn btn-primary'>
+            {% endif %} 
+        </form>
+        {% endif %}
+    </div>
     <nav>
         <ul class="pagination">
             {% if page_obj.has_previous %}
@@ -51,15 +53,20 @@
     {% for post in page_obj %}
     <div id={{ post.id }} class='post'>
         <h6><a href="{% url 'profile' post.poster.username %}">{{ post.poster.username }}</a></h6>
+        <button class='edit-button btn btn-secondary'>Edit</button>
         <p class='content'>{{ post.content }}</p>
+        <form id={{ post.id }} class="edit-form">
+        <textarea class="form-control" id="edit-content">{{ post.content }}</textarea>
+        <input type="button" class="btn btn-primary" id='submit-button' onsubmit="return false" value="Submit"/>
+    </form>
         <p>{{ post.posted_timestamp }}</p>
 
         {% if user.is_authenticated %}
-        <img id='unlike-button' src='https://icons.iconarchive.com/icons/designbolts/free-valentine-heart/256/Heart-icon.png' style='height: 20px'>
+        <img id='unlike-button' src='https://icons.iconarchive.com/icons/designbolts/free-valentine-heart/256/Heart-icon.png'>
 
-        <img id='like-button' src='https://cdn-icons-png.freepik.com/256/1077/1077035.png' style='height: 20px'>
+        <img id='like-button' src='https://cdn-icons-png.freepik.com/256/1077/1077035.png'>
         {% else %}
-        <img src='https://w7.pngwing.com/pngs/89/299/png-transparent-united-kingdom-promotion-time-product-lining-grey-heart-s-love-angle-heart-thumbnail.png' style='height: 20px'>
+        <img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmwQmo_ZDderlNp_ZDlgQfRJumnOZ0FiMfmO1UeOLT5DZrR4PTtOBLvwKxyk_f6JCwFcU&usqp=CAU'>
         {% endif %}
         <span id='sum-like'>{{ post.like_user.count }}</span>
         <p>Comment</p>

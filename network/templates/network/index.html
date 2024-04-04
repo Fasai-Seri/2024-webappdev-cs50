@@ -14,7 +14,7 @@
     <form action="{% url 'index' %}" method='post' id='new-post-form'>
         {% csrf_token %}
         <textarea class='form-control' form='new-post-form' name='content'></textarea>
-        <input type='submit' class="btn btn-primary submit-button"/>
+        <input type='submit' class="btn btn-primary submit-new-post-button"/>
     </form>
 </div>
 {% endif %}
@@ -46,7 +46,7 @@
 {% for post in page_obj %}
 <div id={{ post.id }} class='post'>
     <h6><a href="{% url 'profile' post.poster.username %}">{{ post.poster.username }}</a></h6>
-    <button class='edit-button' style='display: none'>Edit</button>
+    <button class='edit-button btn btn-secondary'>Edit</button>
     <p class='content'>{{ post.content }}</p>
     <form id={{ post.id }} class="edit-form">
         <textarea class="form-control" id="edit-content">{{ post.content }}</textarea>
@@ -55,11 +55,11 @@
     <p>{{ post.posted_timestamp }}</p>
 
     {% if user.is_authenticated %}
-    <img id='unlike-button' src='https://icons.iconarchive.com/icons/designbolts/free-valentine-heart/256/Heart-icon.png' style='height: 20px'>
+    <img id='unlike-button' src='https://icons.iconarchive.com/icons/designbolts/free-valentine-heart/256/Heart-icon.png'>
 
-    <img id='like-button' src='https://cdn-icons-png.freepik.com/256/1077/1077035.png' style='height: 20px'>
+    <img id='like-button' src='https://cdn-icons-png.freepik.com/256/1077/1077035.png'>
     {% else %}
-    <img src='https://w7.pngwing.com/pngs/89/299/png-transparent-united-kingdom-promotion-time-product-lining-grey-heart-s-love-angle-heart-thumbnail.png' style='height: 20px'>
+    <img src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmwQmo_ZDderlNp_ZDlgQfRJumnOZ0FiMfmO1UeOLT5DZrR4PTtOBLvwKxyk_f6JCwFcU&usqp=CAU'>
     {% endif %}
     <span id='sum-like'>{{ post.like_user.count }}</span>
     <p>Comment</p>
